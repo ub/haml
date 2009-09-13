@@ -857,6 +857,30 @@ is compiled to:
       2?
     </p>
 
+Note that when writing block arguments in ruby code inside a Haml template, 
+you should **never** leave space between the last argument and the closing 
+pipe character (`|`).
+The Haml parser interprets *whitespace*&ndash;*pipe*&ndash;*endline* character 
+sequence in source code as a multiline string indicator 
+(see [multiline](#multiline) feature). 
+The last pipe character on a line preceded by a whitespace is stripped by Haml
+processor.
+
+**Do not write block arguments like this in Haml:**
+
+	- foo.each do | x, y |
+	-#                   ^Error!
+	  %li
+
+The code above leads to rather obscure error message during template compilation.
+
+Use argument declaration in the following style, to prevent the error:
+
+	- foo.each do |x, y|
+	  %li
+	-# OK 
+
+
 ### Whitespace Preservation: `~` {#tilde}
 
 `~` works just like `=`, except that it runs {Haml::Helpers#find\_and\_preserve} on its input.
